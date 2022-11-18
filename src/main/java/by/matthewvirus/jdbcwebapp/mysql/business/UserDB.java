@@ -66,7 +66,7 @@ public class UserDB {
         return user;
     }
 
-    public static int insert(@NotNull User user) {
+    public static void insert(@NotNull User user) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -77,7 +77,7 @@ public class UserDB {
                     preparedStatement.setInt(3, user.getAge());
                     preparedStatement.setString(4, user.getGender());
 
-                    return preparedStatement.executeUpdate();
+                    preparedStatement.executeUpdate();
                 }
             }
         } catch (ClassNotFoundException e) {
@@ -85,17 +85,16 @@ public class UserDB {
         } catch (SQLException e) {
             System.err.println(e.getMessage() + e.getSQLState());
         }
-        return 0;
     }
 
-    public static int delete(int id) {
+    public static void delete(int id) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
                 String sql = "DELETE FROM UserInfo WHERE id=?";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);
-                    return preparedStatement.executeUpdate();
+                    preparedStatement.executeUpdate();
                 }
             }
         } catch (ClassNotFoundException e) {
@@ -103,6 +102,5 @@ public class UserDB {
         } catch (SQLException e) {
             System.err.println(e.getMessage() + e.getSQLState());
         }
-        return 0;
     }
 }
