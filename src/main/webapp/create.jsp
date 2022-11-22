@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>Create user</title>
 </head>
 <body>
 <h3>New user</h3>
@@ -20,9 +20,14 @@
         Age
         <input type="number" name="age" placeholder="Age">
     </label><br>
+    <p>Gender</p>
     <label>
-        Gender
-        <input type="text" name="gender" placeholder="Gender">
+        <input type="radio" name="gender" value="Male">
+        Male
+    </label><br>
+    <label>
+        <input type="radio" name="gender" value="Female">
+        Female
     </label><br>
     <input type="submit" value="Create">
 </form>
