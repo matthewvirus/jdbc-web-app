@@ -43,7 +43,6 @@ public class UserDB {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
                 String sql = "SELECT * FROM UserInfo WHERE id=?";
-
                 try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                     preparedStatement.setInt(1, userId);
                     ResultSet resultSet = preparedStatement.executeQuery();
@@ -71,14 +70,21 @@ public class UserDB {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
                 String sql = "INSERT INTO UserInfo(name, surname, age, gender) VALUES(?, ?, ?, ?)";
-                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                    preparedStatement.setString(1, user.getName());
-                    preparedStatement.setString(2, user.getSurname());
-                    preparedStatement.setInt(3, user.getAge());
-                    preparedStatement.setString(4, user.getGender());
+                updateAndInsertConstruction(user, connection, sql);
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage() + e.getSQLState());
+        }
+    }
 
-                    preparedStatement.executeUpdate();
-                }
+    public static void update(@NotNull User user) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try(Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+                String sql = "UPDATE UserInfo SET name=?, surname=?, age=?, gender=?";
+                updateAndInsertConstruction(user, connection, sql);
             }
         } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
@@ -94,6 +100,7 @@ public class UserDB {
                 String sql = "DELETE FROM UserInfo WHERE id=?";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);
+
                     preparedStatement.executeUpdate();
                 }
             }
@@ -101,6 +108,17 @@ public class UserDB {
             System.err.println(e.getMessage());
         } catch (SQLException e) {
             System.err.println(e.getMessage() + e.getSQLState());
+        }
+    }
+
+    private static void updateAndInsertConstruction(@NotNull User user, @NotNull Connection connection, String sql) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getSurname());
+            preparedStatement.setInt(3, user.getAge());
+            preparedStatement.setString(4, user.getGender());
+
+            preparedStatement.executeUpdate();
         }
     }
 }
